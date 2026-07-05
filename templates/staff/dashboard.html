@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Trek Staff Dashboard</h2>
+
+<div class="card shadow-sm mt-3">
+    <div class="card-body">
+        <h5>Welcome, {{ session.get("name") }}</h5>
+        <p>
+            Your account is approved. Assigned trek management features will be added in the staff milestone.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

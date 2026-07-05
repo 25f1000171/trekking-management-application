@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-5 bg-white rounded shadow-sm">
+    <h1 class="text-success">Trekking Management Application</h1>
+    <p class="lead">
+        A web application to manage treks, trek staff, users, and bookings.
+    </p>
+
+    <hr>
+
+    <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
+    <a href="{{ url_for('register_user') }}" class="btn btn-outline-success">Register as User</a>
+    <a href="{{ url_for('register_staff') }}" class="btn btn-outline-primary">Register as Trek Staff</a>
+</div>
+
+{% endblock %}

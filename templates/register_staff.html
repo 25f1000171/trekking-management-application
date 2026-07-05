@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Trek Staff Registration</h4>
+            </div>
+
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Contact</label>
+                        <input type="text" name="contact" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Experience in Years</label>
+                        <input type="number" name="experience" class="form-control" min="0">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Specialization</label>
+                        <input type="text" name="specialization" class="form-control" placeholder="Example: Mountain Guide">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Address</label>
+                        <textarea name="address" class="form-control"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Register as Trek Staff
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

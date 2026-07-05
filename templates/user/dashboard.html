@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>User Dashboard</h2>
+
+<div class="card shadow-sm mt-3">
+    <div class="card-body">
+        <h5>Welcome, {{ session.get("name") }}</h5>
+        <p>
+            You can view and book open treks. Trek booking features will be added in the user milestone.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

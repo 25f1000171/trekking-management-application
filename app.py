@@ -424,12 +424,13 @@ def create_app():
 
         flash("User status updated successfully.", "success")
         return redirect(url_for("admin_users"))
+    
     @app.route("/admin/bookings")
     @role_required("admin")
     def admin_bookings():
         search = request.args.get("search", "").strip()
 
-        booking_query = Booking.query.join(User).join(Trek)
+        booking_query = Booking.query.join(Booking.user).join(Booking.trek)
 
         if search:
             filters = [
@@ -464,7 +465,165 @@ def create_app():
     @app.route("/user/dashboard")
     @role_required("user")
     def user_dashboard():
-        return render_template("user/dashboard.html")
+        user_id = session.get("user_id")
+
+        available_treks = Trek.query.filter_by(status="Open").count()
+        booked_treks = Booking.query.filter_by(
+            user_id=user_id,
+            status="Booked"
+        ).count()
+        completed_treks = Booking.query.filter_by(
+            user_id=user_id,
+            status="Completed"
+        ).count()
+
+        recent_bookings = Booking.query.filter_by(
+            user_id=user_id
+        ).order_by(Booking.booking_date.desc()).limit(5).all()
+
+        return render_template(
+            "user/dashboard.html",
+            available_treks=available_treks,
+            booked_treks=booked_treks,
+            completed_treks=completed_treks,
+            recent_bookings=recent_bookings
+        )
+    
+    @app.route("/user/treks")
+    @role_required("user")
+    def user_treks():
+        search = request.args.get("search", "").strip()
+        difficulty = request.args.get("difficulty", "").strip()
+        location = request.args.get("location", "").strip()
+
+        trek_query = Trek.query.filter_by(status="Open")
+
+        if search:
+            trek_query = trek_query.filter(
+                or_(
+                    Trek.name.ilike(f"%{search}%"),
+                    Trek.location.ilike(f"%{search}%"),
+                    Trek.difficulty.ilike(f"%{search}%")
+                )
+            )
+
+        if difficulty:
+            trek_query = trek_query.filter(Trek.difficulty == difficulty)
+
+        if location:
+            trek_query = trek_query.filter(Trek.location.ilike(f"%{location}%"))
+
+        treks = trek_query.order_by(Trek.start_date.asc()).all()
+
+        user_bookings = Booking.query.filter_by(
+            user_id=session.get("user_id"),
+            status="Booked"
+        ).all()
+
+        booked_trek_ids = [booking.trek_id for booking in user_bookings]
+
+        return render_template(
+            "user/treks.html",
+            treks=treks,
+            search=search,
+            difficulty=difficulty,
+            location=location,
+            booked_trek_ids=booked_trek_ids
+        )
+
+
+    @app.route("/user/treks/<int:trek_id>/book", methods=["POST"])
+    @role_required("user")
+    def book_trek(trek_id):
+        user_id = session.get("user_id")
+        trek = Trek.query.get_or_404(trek_id)
+
+        current_user = User.query.get_or_404(user_id)
+
+        if current_user.is_blacklisted:
+            flash("Your account is blacklisted. You cannot book treks.", "danger")
+            return redirect(url_for("user_treks"))
+
+        if trek.status != "Open":
+            flash("This trek is not open for booking.", "danger")
+            return redirect(url_for("user_treks"))
+
+        if trek.available_slots <= 0:
+            flash("No slots available for this trek.", "danger")
+            return redirect(url_for("user_treks"))
+
+        existing_booking = Booking.query.filter(
+            Booking.user_id == user_id,
+            Booking.trek_id == trek.id,
+            Booking.status.in_(["Booked", "Completed"])
+        ).first()
+
+        if existing_booking:
+            flash("You have already booked this trek.", "warning")
+            return redirect(url_for("user_treks"))
+
+        booking = Booking(
+            user_id=user_id,
+            trek_id=trek.id,
+            status="Booked",
+            payment_status="Not Required"
+        )
+
+        trek.available_slots -= 1
+
+        db.session.add(booking)
+        db.session.commit()
+
+        flash("Trek booked successfully.", "success")
+        return redirect(url_for("my_bookings"))
+
+
+    @app.route("/user/bookings")
+    @role_required("user")
+    def my_bookings():
+        search = request.args.get("search", "").strip()
+
+        booking_query = Booking.query.join(Trek).filter(
+            Booking.user_id == session.get("user_id")
+        )
+
+        if search:
+            booking_query = booking_query.filter(
+                or_(
+                    Trek.name.ilike(f"%{search}%"),
+                    Trek.location.ilike(f"%{search}%"),
+                    Trek.status.ilike(f"%{search}%"),
+                    Booking.status.ilike(f"%{search}%")
+                )
+            )
+
+        bookings = booking_query.order_by(Booking.booking_date.desc()).all()
+
+        return render_template(
+            "user/my_bookings.html",
+            bookings=bookings,
+            search=search
+        )
+
+
+    @app.route("/user/profile", methods=["GET", "POST"])
+    @role_required("user")
+    def user_profile():
+        user = User.query.get_or_404(session.get("user_id"))
+
+        if request.method == "POST":
+            user.name = request.form.get("name")
+            user.contact = request.form.get("contact")
+
+            db.session.commit()
+
+            session["name"] = user.name
+
+            flash("Profile updated successfully.", "success")
+            return redirect(url_for("user_profile"))
+
+        return render_template("user/profile.html", user=user)
+
 
     return app
 

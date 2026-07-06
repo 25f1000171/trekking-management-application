@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>All Booking Records</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back</a>
+</div>
+
+<form method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control"
+               placeholder="Search by booking ID, user, trek, location, status"
+               value="{{ search }}">
+        <button class="btn btn-outline-danger" type="submit">Search</button>
+        <a href="{{ url_for('admin_bookings') }}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>User</th>
+                            <th>User Email</th>
+                            <th>Trek</th>
+                            <th>Location</th>
+                            <th>Booking Date</th>
+                            <th>Booking Status</th>
+                            <th>Payment Status</th>
+                            <th>Trek Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+                                <td>{{ booking.user.name }}</td>
+                                <td>{{ booking.user.email }}</td>
+                                <td>{{ booking.trek.name }}</td>
+                                <td>{{ booking.trek.location }}</td>
+                                <td>{{ booking.booking_date.strftime("%Y-%m-%d") }}</td>
+                                <td>{{ booking.status }}</td>
+                                <td>{{ booking.payment_status }}</td>
+                                <td>{{ booking.trek.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No booking records found.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

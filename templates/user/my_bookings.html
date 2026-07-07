@@ -32,6 +32,7 @@
                             <th>Booking Status</th>
                             <th>Payment Status</th>
                             <th>Trek Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
@@ -46,6 +47,18 @@
                                 <td>{{ booking.status }}</td>
                                 <td>{{ booking.payment_status }}</td>
                                 <td>{{ booking.trek.status }}</td>
+                                <td>
+                                    {% if booking.status == "Booked" and booking.trek.status not in ["Ongoing", "Completed"] %}
+                                        <form method="POST"
+                                              action="{{ url_for('cancel_booking', booking_id=booking.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-muted">No action</span>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

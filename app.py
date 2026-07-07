@@ -751,7 +751,35 @@ def create_app():
             search=search
         )
 
+    @app.route("/user/bookings/<int:booking_id>/cancel", methods=["POST"])
+    @role_required("user")
+    def cancel_booking(booking_id):
+        user_id = session.get("user_id")
 
+        booking = Booking.query.get_or_404(booking_id)
+
+        if booking.user_id != user_id:
+            flash("You can cancel only your own booking.", "danger")
+            return redirect(url_for("my_bookings"))
+
+        if booking.status != "Booked":
+            flash("Only booked treks can be cancelled.", "warning")
+            return redirect(url_for("my_bookings"))
+
+        if booking.trek.status in ["Ongoing", "Completed"]:
+            flash("You cannot cancel an ongoing or completed trek.", "danger")
+            return redirect(url_for("my_bookings"))
+
+        booking.status = "Cancelled"
+
+        if booking.trek.available_slots < booking.trek.total_slots:
+            booking.trek.available_slots += 1
+
+        db.session.commit()
+
+        flash("Booking cancelled successfully.", "success")
+        return redirect(url_for("my_bookings"))
+    
     @app.route("/user/profile", methods=["GET", "POST"])
     @role_required("user")
     def user_profile():

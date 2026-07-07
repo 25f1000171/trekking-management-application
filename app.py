@@ -460,7 +460,153 @@ def create_app():
     @app.route("/staff/dashboard")
     @role_required("staff")
     def staff_dashboard():
-        return render_template("staff/dashboard.html")
+        staff_id = session.get("user_id")
+
+        assigned_treks = Trek.query.filter_by(
+            assigned_staff_id=staff_id
+        ).all()
+
+        total_assigned = len(assigned_treks)
+
+        active_treks = Trek.query.filter(
+            Trek.assigned_staff_id == staff_id,
+            Trek.status.in_(["Open", "Ongoing"])
+        ).count()
+
+        completed_treks = Trek.query.filter_by(
+            assigned_staff_id=staff_id,
+            status="Completed"
+        ).count()
+
+        total_participants = Booking.query.join(Trek).filter(
+            Trek.assigned_staff_id == staff_id,
+            Booking.status.in_(["Booked", "Completed"])
+        ).count()
+
+        return render_template(
+            "staff/dashboard.html",
+            total_assigned=total_assigned,
+            active_treks=active_treks,
+            completed_treks=completed_treks,
+            total_participants=total_participants,
+            assigned_treks=assigned_treks
+        )
+
+    @app.route("/staff/treks")
+    @role_required("staff")
+    def staff_treks():
+        staff_id = session.get("user_id")
+        search = request.args.get("search", "").strip()
+
+        trek_query = Trek.query.filter_by(assigned_staff_id=staff_id)
+
+        if search:
+            trek_query = trek_query.filter(
+                or_(
+                    Trek.name.ilike(f"%{search}%"),
+                    Trek.location.ilike(f"%{search}%"),
+                    Trek.difficulty.ilike(f"%{search}%"),
+                    Trek.status.ilike(f"%{search}%")
+                )
+            )
+
+        treks = trek_query.order_by(Trek.start_date.asc()).all()
+
+        return render_template(
+            "staff/assigned_treks.html",
+            treks=treks,
+            search=search
+        )
+
+
+    @app.route("/staff/treks/<int:trek_id>/update", methods=["GET", "POST"])
+    @role_required("staff")
+    def staff_update_trek(trek_id):
+        staff_id = session.get("user_id")
+
+        trek = Trek.query.get_or_404(trek_id)
+
+        if trek.assigned_staff_id != staff_id:
+            flash("You can manage only your assigned treks.", "danger")
+            return redirect(url_for("staff_treks"))
+
+        if request.method == "POST":
+            available_slots = int(request.form.get("available_slots"))
+            status = request.form.get("status")
+
+            if available_slots < 0:
+                flash("Available slots cannot be negative.", "danger")
+                return redirect(url_for("staff_update_trek", trek_id=trek.id))
+
+            if available_slots > trek.total_slots:
+                flash("Available slots cannot be greater than total slots.", "danger")
+                return redirect(url_for("staff_update_trek", trek_id=trek.id))
+
+            trek.available_slots = available_slots
+            trek.status = status
+
+            if status == "Completed":
+                related_bookings = Booking.query.filter_by(
+                    trek_id=trek.id,
+                    status="Booked"
+                ).all()
+
+                for booking in related_bookings:
+                    booking.status = "Completed"
+
+            db.session.commit()
+
+            flash("Trek updated successfully.", "success")
+            return redirect(url_for("staff_treks"))
+
+        return render_template("staff/update_trek.html", trek=trek)
+
+
+    @app.route("/staff/treks/<int:trek_id>/participants")
+    @role_required("staff")
+    def staff_participants(trek_id):
+        staff_id = session.get("user_id")
+
+        trek = Trek.query.get_or_404(trek_id)
+
+        if trek.assigned_staff_id != staff_id:
+            flash("You can view participants only for your assigned treks.", "danger")
+            return redirect(url_for("staff_treks"))
+
+        bookings = Booking.query.filter_by(
+            trek_id=trek.id
+        ).order_by(Booking.booking_date.desc()).all()
+
+        return render_template(
+            "staff/participants.html",
+            trek=trek,
+            bookings=bookings
+        )
+
+
+    @app.route("/staff/profile", methods=["GET", "POST"])
+    @role_required("staff")
+    def staff_profile():
+        staff = User.query.get_or_404(session.get("user_id"))
+
+        if request.method == "POST":
+            staff.name = request.form.get("name")
+            staff.contact = request.form.get("contact")
+
+            if staff.staff_profile:
+                experience = request.form.get("experience")
+                staff.staff_profile.experience = int(experience) if experience else 0
+                staff.staff_profile.specialization = request.form.get("specialization")
+                staff.staff_profile.address = request.form.get("address")
+
+            db.session.commit()
+
+            session["name"] = staff.name
+
+            flash("Profile updated successfully.", "success")
+            return redirect(url_for("staff_profile"))
+
+        return render_template("staff/profile.html", staff=staff)
 
     @app.route("/user/dashboard")
     @role_required("user")

@@ -1,18 +1,293 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trekora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block content %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
-<div class="p-5 bg-white rounded shadow-sm">
-    <h1 class="text-success">Trekking Management Application</h1>
-    <p class="lead">
-        A web application to manage treks, trek staff, users, and bookings.
-    </p>
+<body class="landing-body">
 
-    <hr>
+<div class="landing-shell">
 
-    <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
-    <a href="{{ url_for('register_user') }}" class="btn btn-outline-success">Register as User</a>
-    <a href="{{ url_for('register_staff') }}" class="btn btn-outline-primary">Register as Trek Staff</a>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="home">
+        <nav class="landing-nav">
+            <div class="landing-logo">TREKORA</div>
+
+            <div class="landing-menu">
+                <a href="#home" class="active-link">Home</a>
+                <a href="#about">About</a>
+                <a href="#treks">Treks</a>
+                <a href="#footer">Contact</a>
+            </div>
+
+            {% if session.get("user_id") %}
+                {% if session.get("role") == "admin" %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="landing-cta">Dashboard ↗</a>
+                {% elif session.get("role") == "staff" %}
+                    <a href="{{ url_for('staff_dashboard') }}" class="landing-cta">Dashboard ↗</a>
+                {% else %}
+                    <a href="{{ url_for('user_dashboard') }}" class="landing-cta">Dashboard ↗</a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('login') }}" class="landing-cta">Start Trek ↗</a>
+            {% endif %}
+        </nav>
+
+        <div class="landing-scroll-left">Scroll Down</div>
+        <div class="landing-scroll-right">Scroll Down</div>
+
+        <div class="landing-hero">
+            <div class="landing-content">
+                <h1 class="landing-title">
+                    Manage treks,<br>
+                    bookings and trails.
+                </h1>
+
+                <p class="landing-subtitle">
+                    A premium trekking management platform for admins, trek staff,
+                    and trekkers to manage journeys, participants, bookings and trekking history.
+                </p>
+
+                <div class="landing-actions">
+                    <a href="{{ url_for('login') }}" class="landing-btn-primary">Login</a>
+                    <a href="{{ url_for('register_user') }}" class="landing-btn-secondary">Register User</a>
+                    <a href="{{ url_for('register_staff') }}" class="landing-btn-secondary">Register Staff</a>
+                </div>
+
+                <div class="landing-line"></div>
+                <div class="landing-scroll-text">Begin Scrolling</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+        <div class="about-grid">
+            <div class="about-text">
+                <div class="section-label">
+                    <span></span> About Trekora
+                </div>
+
+                <h2>
+                    Trekking should feel organized, safe and memorable.
+                </h2>
+
+                <p>
+                    Trekora helps manage treks, staff assignments, user bookings,
+                    trek slots, participant records and booking history from one clean platform.
+                    Admins control the system, staff manage assigned treks, and users can
+                    discover and book available journeys.
+                </p>
+
+                <div class="about-actions">
+                    <a href="{{ url_for('login') }}" class="black-pill">Login ↗</a>
+                    <a href="{{ url_for('register_user') }}" class="text-pill">Join as User ↗</a>
+                </div>
+            </div>
+
+            <div class="about-image"></div>
+        </div>
+    </section>
+
+    <!-- STICKY SCROLL SHOWCASE -->
+<section class="scroll-showcase" id="treks">
+
+    <div class="pin-scene">
+        <div class="pin-bg pin-bg-one"></div>
+
+        <div class="pin-content">
+            <div class="landing-scroll-left">Scroll Down</div>
+            <div class="landing-scroll-right">Scroll Down</div>
+
+            <h2>Kedarnath</h2>
+            <p>
+                Located in the majestic Garhwal Himalayas, 
+                this sacred 16-18 km trek from Gaurikund perfectly blends profound spiritual devotion with a thrilling mountain adventure.
+            </p>
+
+            <div class="pin-buttons">
+                <a href="{{ url_for('register_user') }}">Book Trek ↗</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pin-scene">
+        <div class="pin-bg pin-bg-two"></div>
+
+        <div class="pin-content">
+            <div class="landing-scroll-left">Scroll Down</div>
+            <div class="landing-scroll-right">Scroll Down</div>
+
+            <h2>Darjeeling</h2>
+            <p>
+                Known as a trekker's paradise, this trail takes you through the beautiful 
+                Singalila National Park up to the highest peak in West Bengal.
+            </p>
+
+            <div class="pin-buttons">
+                <a href="{{ url_for('register_user') }}">Book Trek ↗</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pin-scene">
+        <div class="pin-bg pin-bg-three"></div>
+
+        <div class="pin-content">
+            <div class="landing-scroll-left">Scroll Down</div>
+            <div class="landing-scroll-right">Scroll Down</div>
+
+            <h2>Jaisalmer</h2>
+            <p>
+                Experience the magic of the golden Thar Desert with an unforgettable 
+                camel trek and overnight sand dune camping under a starry sky.
+            </p>
+
+            <div class="pin-buttons">
+                <a href="{{ url_for('register_user') }}">Book Trek ↗</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+    <!-- STORIES / CARDS SECTION -->
+    <section class="stories-section">
+        <div class="stories-header">
+            <div>
+                <h2>Trekora features</h2>
+                <p>
+                    A complete role-based trekking platform built with Flask, Jinja, Bootstrap and SQLite.
+                </p>
+            </div>
+
+            <a href="{{ url_for('login') }}" class="black-pill">Read More ❯</a>
+        </div>
+
+        <div class="story-grid">
+            <div class="story-card story-card-one">
+                <h3>Admin Control</h3>
+
+                <div class="tag-row">
+                    <span>Treks</span>
+                    <span>Staff</span>
+                    <span>Users</span>
+                </div>
+
+                <p>
+                    Admin can add treks, approve staff, assign trek staff,
+                    blacklist users and view all booking records.
+                </p>
+            </div>
+
+            <div class="story-card story-card-two">
+                <h3>Staff Dashboard</h3>
+
+                <div class="tag-row">
+                    <span>Assigned</span>
+                    <span>Participants</span>
+                    <span>Status</span>
+                </div>
+
+                <p>
+                    Trek staff can view assigned treks, update slots, track participants
+                    and mark treks as ongoing or completed.
+                </p>
+            </div>
+
+            <div class="story-card story-card-three">
+                <h3>User Bookings</h3>
+
+                <div class="tag-row">
+                    <span>Open Treks</span>
+                    <span>History</span>
+                    <span>Cancel</span>
+                </div>
+
+                <p>
+                    Users can search available treks, book slots, avoid overbooking
+                    and view booking history in a clean dashboard.
+                </p>
+            </div>
+
+            <div class="story-card story-card-four">
+                <h3>Smart Tracking</h3>
+
+                <div class="tag-row">
+                    <span>SQLite</span>
+                    <span>Flask</span>
+                    <span>Jinja</span>
+                </div>
+
+                <p>
+                    The system keeps trek, booking, user and staff data organized
+                    through programmatically created database models.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="final-cta">
+        <p>Let’s begin your journey</p>
+        <h2>
+            Manage every trek from<br>
+            one premium platform.
+        </h2>
+
+        <a href="{{ url_for('login') }}" class="black-pill">Start Now ❯</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="landing-footer" id="footer">
+        <div class="footer-grid">
+            <div>
+                <h2 class="footer-logo">TREKORA</h2>
+                <p class="footer-text">Trekking Management Application</p>
+                <a href="{{ url_for('login') }}" class="footer-link-main">Start Trek ↗</a>
+            </div>
+
+            <div>
+                <h4>Pages</h4>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#treks">Treks</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            </div>
+
+            <div>
+                <h4>Roles</h4>
+                <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+                <a href="{{ url_for('register_staff') }}">Trek Staff</a>
+                <a href="{{ url_for('register_user') }}">Trekker</a>
+                <a href="{{ url_for('login') }}">Dashboard</a>
+            </div>
+
+            <div>
+                <h4>Project</h4>
+                <a href="#">Flask Backend</a>
+                <a href="#">Jinja Templates</a>
+                <a href="#">SQLite Database</a>
+                <a href="#">Bootstrap UI</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span></span>
+            <p>TREKORA TREKKING MANAGEMENT</p>
+            <span></span>
+        </div>
+    </footer>
+
 </div>
 
-{% endblock %}
+</body>
+</html>

@@ -491,15 +491,15 @@ body {
 }
 
 .pin-bg-one {
-    background-image: url("https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1800&q=85");
+    background-image: url("../images/treks/kedarnath.jpg");
 }
 
 .pin-bg-two {
-    background-image: url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1800&q=85");
+    background-image: url("../images/treks/darjeeling.jpg");
 }
 
 .pin-bg-three {
-    background-image: url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1800&q=85");
+    background-image: url("../images/treks/jaisalmer.jpg");
 }
 
 .pin-content {
@@ -991,4 +991,9 @@ body {
     .table-responsive {
         border-radius: 16px;
     }
+}
+/* Hide only side Scroll Down text */
+.landing-scroll-left,
+.landing-scroll-right {
+    display: none !important;
 }

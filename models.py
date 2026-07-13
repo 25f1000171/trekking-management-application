@@ -10,8 +10,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # admin, staff, user
+    password_hash = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
     contact = db.Column(db.String(20))
     is_approved = db.Column(db.Boolean, default=True)
     is_blacklisted = db.Column(db.Boolean, default=False)
@@ -45,7 +45,7 @@ class StaffProfile(db.Model):
     experience = db.Column(db.Integer, default=0)
     specialization = db.Column(db.String(150))
     address = db.Column(db.Text)
-    status = db.Column(db.String(30), default="Pending")  # Pending, Approved, Blacklisted
+    status = db.Column(db.String(30), default="Pending")
 
     user = db.relationship("User", back_populates="staff_profile")
 
@@ -56,7 +56,7 @@ class Trek(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     location = db.Column(db.String(150), nullable=False)
-    difficulty = db.Column(db.String(30), nullable=False)  # Easy, Moderate, Hard
+    difficulty = db.Column(db.String(30), nullable=False)
     duration_days = db.Column(db.Integer, nullable=False)
     total_slots = db.Column(db.Integer, nullable=False)
     available_slots = db.Column(db.Integer, nullable=False)
@@ -87,7 +87,7 @@ class Booking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     trek_id = db.Column(db.Integer, db.ForeignKey("treks.id"), nullable=False)
     booking_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(30), default="Booked")  # Booked, Cancelled, Completed
+    status = db.Column(db.String(30), default="Booked")
     payment_status = db.Column(db.String(30), default="Pending")
 
     user = db.relationship("User", back_populates="bookings")

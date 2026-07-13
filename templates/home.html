@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -38,25 +39,19 @@
             {% endif %}
         </nav>
 
-        <div class="landing-scroll-left">Scroll Down</div>
-        <div class="landing-scroll-right">Scroll Down</div>
-
         <div class="landing-hero">
             <div class="landing-content">
                 <h1 class="landing-title">
-                    Manage treks,<br>
-                    bookings and trails.
+                    Your Ultimate Trekking Companion
                 </h1>
 
                 <p class="landing-subtitle">
-                    A premium trekking management platform for admins, trek staff,
-                    and trekkers to manage journeys, participants, bookings and trekking history.
+                    The all-in-one platform to seamlessly organize bookings, track trails, and connect your trekking community.
                 </p>
 
                 <div class="landing-actions">
                     <a href="{{ url_for('login') }}" class="landing-btn-primary">Login</a>
                     <a href="{{ url_for('register_user') }}" class="landing-btn-secondary">Register User</a>
-                    <a href="{{ url_for('register_staff') }}" class="landing-btn-secondary">Register Staff</a>
                 </div>
 
                 <div class="landing-line"></div>
@@ -74,14 +69,14 @@
                 </div>
 
                 <h2>
-                    Trekking should feel organized, safe and memorable.
+                    Elevating Your Trekking Experience.
                 </h2>
 
                 <p>
-                    Trekora helps manage treks, staff assignments, user bookings,
-                    trek slots, participant records and booking history from one clean platform.
-                    Admins control the system, staff manage assigned treks, and users can
-                    discover and book available journeys.
+                    Trekora is a comprehensive platform designed to simplify every aspect of your trekking operations. 
+                    From seamless bookings and trail tracking to effortless staff coordination, 
+                    we provide a unified ecosystem for admins, guides, and explorers. Focus on the adventure, 
+                    while we handle the logistics.
                 </p>
 
                 <div class="about-actions">
@@ -101,9 +96,6 @@
         <div class="pin-bg pin-bg-one"></div>
 
         <div class="pin-content">
-            <div class="landing-scroll-left">Scroll Down</div>
-            <div class="landing-scroll-right">Scroll Down</div>
-
             <h2>Kedarnath</h2>
             <p>
                 Located in the majestic Garhwal Himalayas, 
@@ -121,9 +113,6 @@
         <div class="pin-bg pin-bg-two"></div>
 
         <div class="pin-content">
-            <div class="landing-scroll-left">Scroll Down</div>
-            <div class="landing-scroll-right">Scroll Down</div>
-
             <h2>Darjeeling</h2>
             <p>
                 Known as a trekker's paradise, this trail takes you through the beautiful 
@@ -141,9 +130,6 @@
         <div class="pin-bg pin-bg-three"></div>
 
         <div class="pin-content">
-            <div class="landing-scroll-left">Scroll Down</div>
-            <div class="landing-scroll-right">Scroll Down</div>
-
             <h2>Jaisalmer</h2>
             <p>
                 Experience the magic of the golden Thar Desert with an unforgettable 
@@ -158,82 +144,6 @@
     </div>
 
 </section>
-
-    <!-- STORIES / CARDS SECTION -->
-    <section class="stories-section">
-        <div class="stories-header">
-            <div>
-                <h2>Trekora features</h2>
-                <p>
-                    A complete role-based trekking platform built with Flask, Jinja, Bootstrap and SQLite.
-                </p>
-            </div>
-
-            <a href="{{ url_for('login') }}" class="black-pill">Read More ❯</a>
-        </div>
-
-        <div class="story-grid">
-            <div class="story-card story-card-one">
-                <h3>Admin Control</h3>
-
-                <div class="tag-row">
-                    <span>Treks</span>
-                    <span>Staff</span>
-                    <span>Users</span>
-                </div>
-
-                <p>
-                    Admin can add treks, approve staff, assign trek staff,
-                    blacklist users and view all booking records.
-                </p>
-            </div>
-
-            <div class="story-card story-card-two">
-                <h3>Staff Dashboard</h3>
-
-                <div class="tag-row">
-                    <span>Assigned</span>
-                    <span>Participants</span>
-                    <span>Status</span>
-                </div>
-
-                <p>
-                    Trek staff can view assigned treks, update slots, track participants
-                    and mark treks as ongoing or completed.
-                </p>
-            </div>
-
-            <div class="story-card story-card-three">
-                <h3>User Bookings</h3>
-
-                <div class="tag-row">
-                    <span>Open Treks</span>
-                    <span>History</span>
-                    <span>Cancel</span>
-                </div>
-
-                <p>
-                    Users can search available treks, book slots, avoid overbooking
-                    and view booking history in a clean dashboard.
-                </p>
-            </div>
-
-            <div class="story-card story-card-four">
-                <h3>Smart Tracking</h3>
-
-                <div class="tag-row">
-                    <span>SQLite</span>
-                    <span>Flask</span>
-                    <span>Jinja</span>
-                </div>
-
-                <p>
-                    The system keeps trek, booking, user and staff data organized
-                    through programmatically created database models.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- CTA SECTION -->
     <section class="final-cta">
@@ -252,7 +162,6 @@
             <div>
                 <h2 class="footer-logo">TREKORA</h2>
                 <p class="footer-text">Trekking Management Application</p>
-                <a href="{{ url_for('login') }}" class="footer-link-main">Start Trek ↗</a>
             </div>
 
             <div>
@@ -272,17 +181,19 @@
             </div>
 
             <div>
-                <h4>Project</h4>
-                <a href="#">Flask Backend</a>
-                <a href="#">Jinja Templates</a>
-                <a href="#">SQLite Database</a>
-                <a href="#">Bootstrap UI</a>
+                <h4>Social Media</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                </div>
             </div>
         </div>
 
         <div class="footer-bottom">
             <span></span>
-            <p>TREKORA TREKKING MANAGEMENT</p>
+            <p>&copy; 2026 TREKORA. ALL RIGHTS RESERVED.</p>
             <span></span>
         </div>
     </footer>

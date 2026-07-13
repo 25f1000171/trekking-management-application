@@ -81,5 +81,5 @@ Main tables:
 
 Use the following credentials after running the database setup file:
 
-Email: admin@trek.com
+Email: admin@gmail.com
 Password: admin123

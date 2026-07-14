@@ -3,7 +3,7 @@ from app import create_app
 from models import db, User
 
 
-ADMIN_EMAIL = "admin@gmail.com"
+ADMIN_EMAIL = "admin@trek.com"
 ADMIN_PASSWORD = "admin123"
 
 

@@ -81,5 +81,5 @@ Main tables:
 
 Use the following credentials after running the database setup file:
 
-Email: admin@gmail.com
+Email: admin@terk.com
 Password: admin123

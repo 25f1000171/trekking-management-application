@@ -802,10 +802,12 @@ def create_app():
     return app
 
 
+app = create_app()
+
+with app.app_context():
+    from database_setup import create_admin_user
+    db.create_all()
+    create_admin_user()
+
 if __name__ == "__main__":
-    app = create_app()
-
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
